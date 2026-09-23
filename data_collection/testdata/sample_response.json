@@ -1,0 +1,30 @@
+{
+    "header": {
+        "from_location": "DAR",
+        "to_location": "BHM"
+    },
+    "Services": [
+        {
+            "serviceAttributesMetrics": {
+                "origin_location": "NCL",
+                "destination_location": "RDG",
+                "gbtt_ptd": "0552",
+                "gbtt_pta": "0828",
+                "toc_code": "XC",
+                "matched_services": "1",
+                "rids": [
+                    "202609097101176"
+                ]
+            },
+            "Metrics": [
+                {
+                    "tolerance_value": "0",
+                    "num_not_tolerance": "1",
+                    "num_tolerance": "0",
+                    "percent_tolerance": "0",
+                    "global_tolerance": true
+                }
+            ]
+        }
+    ]
+}

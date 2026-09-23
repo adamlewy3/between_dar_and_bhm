@@ -1,0 +1,153 @@
+{
+    "serviceAttributesDetails": {
+        "date_of_service": "2026-09-09",
+        "toc_code": "XC",
+        "rid": "202609097101161",
+        "locations": [
+            {
+                "location": "EDB",
+                "gbtt_ptd": "1305",
+                "gbtt_pta": "",
+                "actual_td": "1304",
+                "actual_ta": "",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "BWK",
+                "gbtt_ptd": "1346",
+                "gbtt_pta": "1345",
+                "actual_td": "1346",
+                "actual_ta": "1344",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "ALM",
+                "gbtt_ptd": "1407",
+                "gbtt_pta": "1406",
+                "actual_td": "1408",
+                "actual_ta": "1406",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "NCL",
+                "gbtt_ptd": "1441",
+                "gbtt_pta": "1433",
+                "actual_td": "1441",
+                "actual_ta": "1436",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "DHM",
+                "gbtt_ptd": "1454",
+                "gbtt_pta": "1453",
+                "actual_td": "1454",
+                "actual_ta": "1452",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "DAR",
+                "gbtt_ptd": "1512",
+                "gbtt_pta": "1510",
+                "actual_td": "1512",
+                "actual_ta": "1511",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "YRK",
+                "gbtt_ptd": "1544",
+                "gbtt_pta": "1539",
+                "actual_td": "1545",
+                "actual_ta": "1539",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "LDS",
+                "gbtt_ptd": "1615",
+                "gbtt_pta": "1607",
+                "actual_td": "1615",
+                "actual_ta": "1606",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "WKF",
+                "gbtt_ptd": "1627",
+                "gbtt_pta": "1626",
+                "actual_td": "1628",
+                "actual_ta": "1627",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "SHF",
+                "gbtt_ptd": "1656",
+                "gbtt_pta": "1655",
+                "actual_td": "1656",
+                "actual_ta": "1654",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "CHD",
+                "gbtt_ptd": "1708",
+                "gbtt_pta": "1707",
+                "actual_td": "1710",
+                "actual_ta": "1708",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "DBY",
+                "gbtt_ptd": "1731",
+                "gbtt_pta": "1727",
+                "actual_td": "1732",
+                "actual_ta": "1727",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "BUT",
+                "gbtt_ptd": "1741",
+                "gbtt_pta": "1740",
+                "actual_td": "1742",
+                "actual_ta": "1741",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "BHM",
+                "gbtt_ptd": "1812",
+                "gbtt_pta": "1807",
+                "actual_td": "1814",
+                "actual_ta": "1808",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "CNM",
+                "gbtt_ptd": "1852",
+                "gbtt_pta": "1850",
+                "actual_td": "1856",
+                "actual_ta": "1854",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "GCR",
+                "gbtt_ptd": "",
+                "gbtt_pta": "1900",
+                "actual_td": "",
+                "actual_ta": "1917",
+                "late_canc_reason": ""
+            },
+            {
+                "location": "NWP",
+                "gbtt_ptd": "1953",
+                "gbtt_pta": "1952",
+                "actual_td": "",
+                "actual_ta": "",
+                "late_canc_reason": "824"
+            },
+            {
+                "location": "CDF",
+                "gbtt_ptd": "",
+                "gbtt_pta": "2006",
+                "actual_td": "",
+                "actual_ta": "",
+                "late_canc_reason": "824"
+            }
+        ]
+    }
+}

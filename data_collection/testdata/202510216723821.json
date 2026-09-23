@@ -1,0 +1,105 @@
+{
+  "serviceAttributesDetails": {
+    "date_of_service": "2025-10-21",
+    "toc_code": "XC",
+    "rid": "202510216723821",
+    "locations": [
+      {
+        "location": "NCL",
+        "gbtt_ptd": "1035",
+        "gbtt_pta": "",
+        "actual_td": "",
+        "actual_ta": "",
+        "late_canc_reason": "896"
+      },
+      {
+        "location": "DHM",
+        "gbtt_ptd": "1048",
+        "gbtt_pta": "1046",
+        "actual_td": "",
+        "actual_ta": "",
+        "late_canc_reason": "896"
+      },
+      {
+        "location": "DAR",
+        "gbtt_ptd": "1106",
+        "gbtt_pta": "",
+        "actual_td": "1105",
+        "actual_ta": "",
+        "late_canc_reason": ""
+      },
+      {
+        "location": "YRK",
+        "gbtt_ptd": "1136",
+        "gbtt_pta": "1134",
+        "actual_td": "1138",
+        "actual_ta": "1134",
+        "late_canc_reason": ""
+      },
+      {
+        "location": "DON",
+        "gbtt_ptd": "1159",
+        "gbtt_pta": "1157",
+        "actual_td": "1200",
+        "actual_ta": "1158",
+        "late_canc_reason": ""
+      },
+      {
+        "location": "SHF",
+        "gbtt_ptd": "1224",
+        "gbtt_pta": "1221",
+        "actual_td": "1224",
+        "actual_ta": "1219",
+        "late_canc_reason": ""
+      },
+      {
+        "location": "DBY",
+        "gbtt_ptd": "1255",
+        "gbtt_pta": "1251",
+        "actual_td": "1257",
+        "actual_ta": "1255",
+        "late_canc_reason": ""
+      },
+      {
+        "location": "BHM",
+        "gbtt_ptd": "1333",
+        "gbtt_pta": "1328",
+        "actual_td": "1333",
+        "actual_ta": "1326",
+        "late_canc_reason": ""
+      },
+      {
+        "location": "LMS",
+        "gbtt_ptd": "1401",
+        "gbtt_pta": "1400",
+        "actual_td": "1400",
+        "actual_ta": "1358",
+        "late_canc_reason": ""
+      },
+      {
+        "location": "BAN",
+        "gbtt_ptd": "1418",
+        "gbtt_pta": "1417",
+        "actual_td": "1418",
+        "actual_ta": "1416",
+        "late_canc_reason": ""
+      },
+      {
+        "location": "OXF",
+        "gbtt_ptd": "1442",
+        "gbtt_pta": "1440",
+        "actual_td": "1441",
+        "actual_ta": "1436",
+        "late_canc_reason": ""
+      },
+      {
+        "location": "RDG",
+        "gbtt_ptd": "",
+        "gbtt_pta": "1507",
+        "actual_td": "",
+        "actual_ta": "1503",
+        "late_canc_reason": ""
+      }
+    ]
+  }
+}

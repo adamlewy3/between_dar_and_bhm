@@ -1,0 +1,8 @@
+data_collection/.env
+.venv
+.git
+*.pyc
+*.pyo
+data_collection/data/
+data_collection/test.py
+data_collection/metrics_test.py
