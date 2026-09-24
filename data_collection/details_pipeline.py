@@ -206,6 +206,4 @@ if __name__ == '__main__':
                 load_details(transformed_data, start_station, end_station)
     """
 
-    get_details("202510216723821", write=True)
-202510216723821
 
