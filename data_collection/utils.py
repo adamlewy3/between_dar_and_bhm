@@ -10,6 +10,8 @@ import datetime
 import time
 import json
 import os
+import meteostat as ms
+import pandas as pd
     
 def get_weekday(date: datetime.datetime) -> str:
     """
@@ -223,9 +225,69 @@ def distance_between_stations(init_station: str, start_station : str) -> int | N
         return 228
     elif init_station == "ABD" and start_station == "DAR":
         return 293
+    elif init_station == "DEE" and start_station == "DAR":
+        return 233
     else:
         print(f"Initial Station {init_station} hasn't been hardcoded!")
         return None
+
+
+def string_time_to_formatted(date: str, time : str) -> datetime.datetime:
+    """
+    Given a date in the form YYYY-MM-DD, and a time in the form HHMM (or HMM, as is seen in the dataset),
+    return a datetime object withe the given date and time.
+    """
+    print(date, time)
+    datee = formatted_date_to_datetime(date)
+    time = time.split('.')[0] 
+
+    if len(time) == 3:
+        hour = int(time[0])
+        minutes = int(time[1:3])
+        return datetime.datetime(datee.year, datee.month, datee.day, hour, minutes)
+    else:
+        hour = int(time[0:2])
+        minutes = int(time[2:4])
+        return datetime.datetime(datee.year, datee.month, datee.day, hour, minutes)
+
+"""
+
+    Utilities for Weather Data
+
+"""
+
+def get_closest_weather_station(station : str) -> str | None:
+    # Given a 3-letter TOC code, return the id of the closest weather station
+    weather_stations = {
+        "DAR" : "03263",
+        "BHM" : "03534",
+        "EDB" : "03160",
+        "GLC" : "03140",
+        "ABD" : "03091",
+        "DEE" : "03163",
+        "NCL" : "03245"
+    }
+
+    return weather_stations[station]
+
+def hourly_weather(station : str, date : datetime.datetime) -> list:
+    start = datetime.datetime(date.year, date.month, date.day, date.hour) 
+    end = start + datetime.timedelta(minutes=1)
+
+    ts = ms.hourly(ms.Station(id=station), start, end)
+    df = ts.fetch()
+
+    weatherlist = df.values.flatten().tolist()
+
+    #Clean the data 
+    if type(weatherlist[3]) is pd.api.typing.NAType:
+        weatherlist[3] = None 
+    if type(weatherlist[6]) is pd.api.typing.NAType:
+        weatherlist[6] = None
+    if type(weatherlist[8]) is pd.api.typing.NAType:
+        weatherlist[8] = None
+
+    return weatherlist
 
 """
 
@@ -236,4 +298,5 @@ def distance_between_stations(init_station: str, start_station : str) -> int | N
 
 
 if __name__ == '__main__':
-    print(get_api_key())
+
+    print(hourly_weather('03263', datetime.datetime(2026,7,3,15)))

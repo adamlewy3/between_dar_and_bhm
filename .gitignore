@@ -6,3 +6,4 @@ data_collection/.env
 data_collection/data/
 data_collection/test.py
 data_collection/metrics_test.py
+research/
