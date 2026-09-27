@@ -30,7 +30,7 @@ load_dotenv()
 
 headers = {
     "User-Agent": "",
-    "Content_Type" : "application/json",
+    "content-type" : "application/json",
     "x-apikey": os.getenv("APIKEY")
 }
 
@@ -90,8 +90,8 @@ def get_rids(date : datetime.datetime, start_station : str, end_station : str) -
         from_time = format_time(date + datetime.timedelta(hours=i))
         to_time = format_time(date + datetime.timedelta(hours=i+1))
         payload = json.dumps({
-            "from_loc" : start_station,
-            "to_loc" : end_station,
+            "from_loc" : start_station.upper(),
+            "to_loc" : end_station.upper(),
             "from_time" : from_time,
             "to_time" : to_time,
             "from_date" : formatted_date,
@@ -124,27 +124,43 @@ def get_rids(date : datetime.datetime, start_station : str, end_station : str) -
                     res.append(rid)
 
                 print(f"Found RID's of services between {from_time} and {to_time}.")
-                print(f"Waiting 1 second to send next request.")
-                time.sleep(1)
 
     return res 
 
-def append_rids(date, res):
+def append_rids(date, res, start_station, end_station):
 
-    with open("data/rids_dar_to_bhm.json", 'r') as file:
+    with open(f"data/rids_{start_station.lower()}_to_{end_station.lower()}.json", 'r') as file:
         info = json.load(file)
 
     info[utils.format_date(date)] = res 
 
 
-    with open("data/rids_dar_to_bhm.json", 'w') as file:
+    with open(f"data/rids_{start_station.lower()}_to_{end_station.lower()}.json", 'w') as file:
         json.dump(info, file, indent=2)
-        print("Successfully written to 'data/rids_dar_to_bhm.json'!")
+        print(f"Successfully written {date}'s RIDs to 'data/rids_dar_to_bhm.json'!")
 
     
+def fix_rids(start_station: str, end_station: str):
+    with open(f"data/rids_{start_station.lower()}_to_{end_station.lower()}.json") as file:
+        data = json.load(file)
+
+    for key in data:
+        if data[key] is None:
+            rids = get_rids(utils.formatted_date_to_datetime(key), start_station, end_station)
+            append_rids(utils.formatted_date_to_datetime(key), rids, start_station, end_station)
+
+def rids_date_to_date(date1 : datetime.datetime, date2 : datetime.datetime, start_station: str, end_station :str):
+    """
+    Get rids from date1 to date2 inclusive.
+    """
+    num_days = (date2 - date1).days
+
+    if num_days > 0:
+        for i in range(1,num_days+1):
+            current_date = date1+datetime.timedelta(days=i)
+            res = get_rids(current_date, start_station, end_station)
+            append_rids(current_date, res)
+
 if __name__ == '__main__':
-    # Get RIDs from the past year
-    initial_date = datetime.datetime(2026,4, 7)
 
-    get_rids(initial_date, "DAR", "BHM")
-
+    rids_date_to_date(datetime.datetime(2026,9,13),datetime.datetime(2026,9,26),"dar","bhm")

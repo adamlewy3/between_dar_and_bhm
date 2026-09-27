@@ -12,6 +12,7 @@ import json
 import os
 import meteostat as ms
 import pandas as pd
+import unittest
     
 def get_weekday(date: datetime.datetime) -> str:
     """
@@ -90,7 +91,7 @@ def get_delay(time1: str, time2: str) -> int | None:
         minutes_diff = (time2_formatted - time1_formatted).total_seconds() // 60
         return int(minutes_diff)
     else:
-        time_2_formatted = datetime.datetime(2025,10,2, hour=time2_hour, minute= time2_minutes)
+        time2_formatted = datetime.datetime(2025,10,2, hour=time2_hour, minute= time2_minutes)
         minutes_diff = (time2_formatted - time1_formatted).total_seconds() // 60
         return int(minutes_diff)
 
@@ -102,7 +103,7 @@ def get_location(locations: list[dict], station: str) -> dict:
         if location["location"] == station:
             return location
 
-def init_punc_details(location: dict, cancelled=False) -> Tuple:
+def init_punc_details(location: dict, cancelled=False) -> tuple:
     """
     Given a dictionary of the following form:
             {
@@ -128,7 +129,7 @@ def init_punc_details(location: dict, cancelled=False) -> Tuple:
         return init_station, init_ptd, init_atd
         
 
-def start_punc_details(location: dict, cancelled = False) -> Tuple:
+def start_punc_details(location: dict, cancelled = False) -> tuple:
     """
     Given a dictionary of the following form:
             {
@@ -161,7 +162,7 @@ def start_punc_details(location: dict, cancelled = False) -> Tuple:
         start_dept_delay = None
         return start_station, start_pta, start_ata, start_arrival_delay, start_ptd, start_atd, start_dept_delay
 
-def end_punc_details(location : dict, cancelled = False) -> Tuple:
+def end_punc_details(location : dict, cancelled = False) -> tuple:
     """
     Given a dictionary of the following form:
             {
@@ -237,7 +238,6 @@ def string_time_to_formatted(date: str, time : str) -> datetime.datetime:
     Given a date in the form YYYY-MM-DD, and a time in the form HHMM (or HMM, as is seen in the dataset),
     return a datetime object withe the given date and time.
     """
-    print(date, time)
     datee = formatted_date_to_datetime(date)
     time = time.split('.')[0] 
 
@@ -291,12 +291,10 @@ def hourly_weather(station : str, date : datetime.datetime) -> list:
 
 """
 
-    Utilities for testing:
+    Testing Utilities 
 
 """
 
-
-
 if __name__ == '__main__':
+    pass
 
-    print(hourly_weather('03263', datetime.datetime(2026,7,3,15)))

@@ -17,6 +17,7 @@ import utils
 #External Imports
 import requests
 from dotenv import load_dotenv
+import tqdm
 
 load_dotenv()
 
@@ -49,14 +50,14 @@ def get_details(rid : str, write =False):
         'rid':rid
     })
 
-    print(f"Sending HTTP Post Request for RID {rid}.") 
+    # print(f"Sending HTTP Post Request for RID {rid}.") 
     
     t0 = time.time()
     response = requests.request("POST", reqUrl, data=payload, headers = headers) 
     t1 = time.time()
     #Check if this works
 
-    print(f"Status code {response.status_code} received after {t1-t0:.2f} seconds")
+    # print(f"Status code {response.status_code} received after {t1-t0:.2f} seconds")
 
     if response.status_code == 200 and write == False:
         return response.json()
@@ -130,15 +131,15 @@ def load_details(data, start_station, end_station):
         file = open(fp, 'a', newline='')
         writer = csv.writer(file, lineterminator='\n')
         writer.writerows([['rid','toc_code','date','month','day','cancelled','canc_reason','init_station','init_ptd','init_atd','start_station','start_pta','start_ata','start_arrival_delay','start_ptd','start_atd','start_dept_delay','distance_from_init','end_station','end_pta','end_ata','end_delay','delayed']])
-        print(f"Created file")
+        # print(f"Created file")
         writer.writerows(data)
-        print(f"Successfully written to {fp}!")
+        # print(f"Successfully written to {fp}!")
         file.close()
     else:
         file = open(fp, 'a', newline='')
         writer = csv.writer(file, lineterminator='\n')
         writer.writerows(data)
-        print(f"Succesfully Written to {fp}!")
+        # print(f"Succesfully Written to {fp}!")
         file.close()
         
 
@@ -190,20 +191,29 @@ if __name__ == '__main__':
     Main Loop for the program
     """
 
-    """
     start_station = "DAR"
     end_station = "BHM"
-    initial_date = datetime.datetime(2026,2,28)
-    for i in range(200):
+
+    #with open(f"data/rids_{start_station.lower()}_to_{end_station.lower()}.json") as file:
+    #    data = json.load(file)
+
+    #initial_date = utils.formatted_date_to_datetime(list(data.keys())[0])
+    #num_dates = len(data.keys())
+
+    initial_date = datetime.datetime(2026, 8, 5)
+    today = datetime.datetime(2026, 9, 26)
+
+    num_dates = abs((today-initial_date).days)
+
+    for i in tqdm.trange(num_dates):
         current_date = initial_date + datetime.timedelta(days=i)
         rids = load_rids(current_date, start_station, end_station)
-        if rids is None or len(rids) == 0:
+        if len(rids) == 0:
             continue
         else:
             for rid in rids:
                 data = get_details(rid)
                 transformed_data = transform_details(data, start_station, end_station)
                 load_details(transformed_data, start_station, end_station)
-    """
 
 
