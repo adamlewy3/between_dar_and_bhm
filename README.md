@@ -4,6 +4,7 @@
 
 ### Project Structure
  
+'''
 between_dar_and_bhm/
 ├── .gitignore
 ├── data_collection/
@@ -31,6 +32,7 @@ between_dar_and_bhm/
     ├── EDA.ipynb
     ├── plotting_utils.py
     └── predictions.md
+'''
 
 ### Acknowledgements 
 
