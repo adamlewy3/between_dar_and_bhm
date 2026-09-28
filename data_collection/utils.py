@@ -228,6 +228,28 @@ def distance_between_stations(init_station: str, start_station : str) -> int | N
         return 293
     elif init_station == "DEE" and start_station == "DAR":
         return 233
+    elif init_station == "PLY" and start_station == "BHM":
+        return 282 
+    elif init_station == "RDG" and start_station == "BHM":
+        return 130 
+    elif init_station == "BHM" and start_station == "BHM":
+        return 0
+    elif init_station == "CDF" and start_station == "BHM":
+        return 143
+    elif init_station == "PNZ" and start_station == "BHM":
+        return 365
+    elif init_station == "BRI" and start_station == "BHM":
+        return 124
+    elif init_station == "CNM" and start_station == "BHM":
+        return 67
+    elif init_station == "WOP" and start_station == "BHM":
+        return 40
+    elif init_station == "EXD" and start_station == "BHM":
+        return 225 
+    elif init_station == "GCR" and start_station == "BHM":
+        return 72 
+    elif init_station == "TAU" and start_station == "BHM":
+        return 215 
     else:
         print(f"Initial Station {init_station} hasn't been hardcoded!")
         return None

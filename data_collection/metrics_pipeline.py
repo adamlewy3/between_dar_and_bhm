@@ -10,6 +10,7 @@ import json
 import time
 import datetime
 import os
+from tqdm import trange
 
 # External Imports
 
@@ -22,9 +23,6 @@ from dotenv import load_dotenv
 
 
 # Information that remains constant with every request.
-
-START_STATION = "DAR"
-END_STATION = "BHM"
 
 load_dotenv()
 
@@ -85,7 +83,8 @@ def get_rids(date : datetime.datetime, start_station : str, end_station : str) -
 
     res = []
     
-    for i in range(18): #None of the services I want to investigate run during the night. This is 5am to 11pm
+    for i in trange(18, desc=f'{formatted_date}', bar_format='[{elapsed}<{remaining}] {n_fmt}/{total_fmt} | {l_bar}{bar} {rate_fmt}{postfix}', colour='red', leave=False, position=1): 
+        #None of the services I want to investigate run during the night. This is 5am to 11pm
         #Preparing the payload
         from_time = format_time(date + datetime.timedelta(hours=i))
         to_time = format_time(date + datetime.timedelta(hours=i+1))
@@ -99,7 +98,7 @@ def get_rids(date : datetime.datetime, start_station : str, end_station : str) -
             "days" : formatted_day
         })
 
-        print("Sending HTTP Post Request")
+        # print("Sending HTTP Post Request")
         t0 = time.time()
         reqUrl = os.getenv("METRICS_URL") 
         response = requests.request("POST", reqUrl, data=payload, headers=headers)
@@ -109,26 +108,27 @@ def get_rids(date : datetime.datetime, start_station : str, end_station : str) -
 
         if status_code != 200:
             # Handling Bad Response. Ending Loop Here So I know which Day I'm on.
-            print(f"HTTP Post Request Failed after {t1-t0:.2f} seconds, failed on day {formatted_date}")
-            print(f"{status_code}")
+            # print(f"HTTP Post Request Failed after {t1-t0:.2f} seconds, failed on day {formatted_date}")
+            # print(f"{status_code}")
             return None
         else:
-            print(f"HTTP Post Request Succeeded after {t1-t0:.2f} seconds.")
+            # print(f"HTTP Post Request Succeeded after {t1-t0:.2f} seconds.")
             if len(response.json()["Services"]) == 0: # Handing the case when no services ran
-                print(f"No services ran between {from_time} and {to_time}.")
-                print(f"Waiting 1 second to send next request.")
-                time.sleep(1)
+                continue
+                #print(f"No services ran between {from_time} and {to_time}.")
+                #print(f"Waiting 1 second to send next request.")
             else:
                 rids = response.json()["Services"][0]["serviceAttributesMetrics"]["rids"] 
                 for rid in rids:
                     res.append(rid)
 
-                print(f"Found RID's of services between {from_time} and {to_time}.")
+                # print(f"Found RID's of services between {from_time} and {to_time}.")
 
     return res 
 
 def append_rids(date, res, start_station, end_station):
 
+    # This is not robust enough: I need it to create a file if one doesn't already exist.
     with open(f"data/rids_{start_station.lower()}_to_{end_station.lower()}.json", 'r') as file:
         info = json.load(file)
 
@@ -137,7 +137,7 @@ def append_rids(date, res, start_station, end_station):
 
     with open(f"data/rids_{start_station.lower()}_to_{end_station.lower()}.json", 'w') as file:
         json.dump(info, file, indent=2)
-        print(f"Successfully written {date}'s RIDs to 'data/rids_dar_to_bhm.json'!")
+        # print(f"Successfully written {date}'s RIDs to 'data/rids_dar_to_bhm.json'!")
 
     
 def fix_rids(start_station: str, end_station: str):
@@ -156,11 +156,11 @@ def rids_date_to_date(date1 : datetime.datetime, date2 : datetime.datetime, star
     num_days = (date2 - date1).days
 
     if num_days > 0:
-        for i in range(1,num_days+1):
+        for i in trange(num_days, desc='Getting RIDs', bar_format='[{elapsed}<{remaining}] {n_fmt}/{total_fmt} | {l_bar}{bar} {rate_fmt}{postfix}', colour='green', leave=True):
             current_date = date1+datetime.timedelta(days=i)
             res = get_rids(current_date, start_station, end_station)
-            append_rids(current_date, res)
+            append_rids(current_date, res, start_station, end_station)
 
 if __name__ == '__main__':
 
-    rids_date_to_date(datetime.datetime(2026,9,13),datetime.datetime(2026,9,26),"dar","bhm")
+    rids_date_to_date(datetime.datetime(2025,10,20),datetime.datetime(2026,9,26),"bhm","dar")

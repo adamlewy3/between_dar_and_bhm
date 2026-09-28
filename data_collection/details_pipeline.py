@@ -17,7 +17,7 @@ import utils
 #External Imports
 import requests
 from dotenv import load_dotenv
-import tqdm
+from tqdm import trange
 
 load_dotenv()
 
@@ -190,30 +190,36 @@ if __name__ == '__main__':
     """
     Main Loop for the program
     """
+    
+    
+    start_station = "BHM"
+    end_station = "DAR"
 
-    start_station = "DAR"
-    end_station = "BHM"
 
     #with open(f"data/rids_{start_station.lower()}_to_{end_station.lower()}.json") as file:
     #    data = json.load(file)
 
-    #initial_date = utils.formatted_date_to_datetime(list(data.keys())[0])
-    #num_dates = len(data.keys())
-
-    initial_date = datetime.datetime(2026, 8, 5)
+    initial_date = datetime.datetime(2026, 8, 7)
     today = datetime.datetime(2026, 9, 26)
-
     num_dates = abs((today-initial_date).days)
 
-    for i in tqdm.trange(num_dates):
+    for i in trange(num_dates, desc='Collecting Service Details', leave=True):
         current_date = initial_date + datetime.timedelta(days=i)
         rids = load_rids(current_date, start_station, end_station)
         if len(rids) == 0:
             continue
         else:
-            for rid in rids:
-                data = get_details(rid)
+            for i in trange(len(rids), desc=f'{utils.format_date(current_date)}', position=1, leave=False):
+                data = get_details(rids[i])
                 transformed_data = transform_details(data, start_station, end_station)
                 load_details(transformed_data, start_station, end_station)
 
+
+    """
+    initial_date = datetime.datetime(2026, 2, 18)
+    rids = load_rids(initial_date, start_station, end_station)
+    for i in trange(len(rids)):
+        get_details(rids[i], write=True)
+
+    """
 
