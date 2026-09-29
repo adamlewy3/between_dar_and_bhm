@@ -263,7 +263,7 @@ def string_time_to_formatted(date: str, time : str) -> datetime.datetime:
     datee = formatted_date_to_datetime(date)
     time = time.split('.')[0] 
 
-    if len(time) == 3:
+    if len(time) == 3 or (len(time) == 4 and time[0] == "0"):
         hour = int(time[0])
         minutes = int(time[1:3])
         return datetime.datetime(datee.year, datee.month, datee.day, hour, minutes)
@@ -299,24 +299,52 @@ def hourly_weather(station : str, date : datetime.datetime) -> list:
     ts = ms.hourly(ms.Station(id=station), start, end)
     df = ts.fetch()
 
+    if df is None:
+        return [None for _ in range(11)] 
+
     weatherlist = df.values.flatten().tolist()
 
     #Clean the data 
-    if type(weatherlist[3]) is pd.api.typing.NAType:
-        weatherlist[3] = None 
-    if type(weatherlist[6]) is pd.api.typing.NAType:
-        weatherlist[6] = None
-    if type(weatherlist[8]) is pd.api.typing.NAType:
-        weatherlist[8] = None
+    for i in range(len(weatherlist)):
+        if type(weatherlist[i]) is pd.api.typing.NAType:
+            weatherlist[i] = None
 
     return weatherlist
 
-"""
+def weather_lookback_avg(station : str, date: datetime.datetime, hours: int):
+    """
+    Computes weather conditions over a lookback window of hours hours.
+    """
+    start = date - datetime.timedelta(hours=hours)
 
-    Testing Utilities 
+    ts = ms.hourly(ms.Station(id=station), start, date)
+    df = ts.fetch()
 
-"""
+    #Temperature
+    mean_temp = df['temp'].mean()
+    min_temp = df['temp'].min()
+    max_temp = df['temp'].max()
+
+    #Wind Speed
+    mean_wspd =df['wspd'].mean()
+    min_wspd = df['wspd'].min()
+    max_wspd = df['wspd'].max()
+
+    #Relative Humidity
+    mean_rhum = df['rhum'].mean()
+    min_rhum = df['rhum'].min()
+    max_rhum = df['rhum'].max()
+
+    #Pressure
+    mean_pres = df['pres'].mean()
+    min_pres = df['pres'].min()
+    max_pres = df['pres'].max()
+
+    #Preciptation
+    mean_prcp = df['prcp'].mean()
+    cum_prcp = df['prcp'].sum()
+
+    return [mean_temp, min_temp, max_temp, mean_wspd, min_wspd, max_wspd, mean_rhum, min_rhum, max_rhum, mean_pres, min_pres, max_pres, mean_prcp, cum_prcp]
 
 if __name__ == '__main__':
-    pass
-
+    print(weather_lookback_avg(get_closest_weather_station("DAR"), datetime.datetime(2026,7,1), 72))
