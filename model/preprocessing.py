@@ -17,12 +17,19 @@ def string_time_to_formatted(time : str) -> datetime.datetime:
         minutes = int(time[2:4])
         return datetime.datetime(2025, 10, 1, hour, minutes)
 
-def get_station(station):
+def get_start_station(row):
     stations = {
         "DAR": 0,
         "BHM": 1
     }
-    return stations[station]
+    return stations[row['start_station']]
+
+def get_end_station(row):
+    stations = {
+        "DAR": 0,
+        "BHM": 1
+    }
+    return stations[row['end_station']]
 
 def encode_sin_hour_minute(time):
     datee = string_time_to_formatted(time)
@@ -103,18 +110,90 @@ def encode_cos_month(month):
     }
     return np.cos((2*np.pi*months[month])/12) 
 
+def formatted_date_to_datetime(date : str) -> datetime.datetime:
+    """
+    Given a date in the format YYYY-MM-DD, return a datetime object representing the same date.
+    """
+    datee = datetime.datetime.strptime(date, "%Y-%m-%d")
+
+    return datee
+
+def encode_sin_date(date):
+    datee = formatted_date_to_datetime(date)
+    first_day_of_year = datetime.datetime(datee.year, 1, 1)
+
+    num_days = abs((datee-first_day_of_year).days)
+
+    return np.sin((2*np.pi*num_days)/365)
+
+def encode_cos_date(date):
+    datee = formatted_date_to_datetime(date)
+    first_day_of_year = datetime.datetime(datee.year, 1, 1)
+
+    num_days = abs((datee-first_day_of_year).days)
+
+    return np.cos((2*np.pi*num_days)/365)
+
+def encode_delay(delay):
+    if delay >= 5:
+        return True
+    else:
+        return False
+
 def prepare_for_delay_classification(start_station, end_station):
     """
     Load Dataframe, remove irrelevant columns, encode date and time data.
     """
-    fp = f"data/{start_station.lower()}_to_{end_station.lower()}_weather.csv"
+    fp = f"../data_collection/data/{start_station.lower()}_to_{end_station.lower()}_weather.csv"
 
-    data = pd.read_csv(fp)
+    data = pd.read_csv(fp) 
 
-    # Remove cancelled trains:
-    pass
+    data = data.loc[lambda df: df['cancelled'] == False] # Not Cancelled Trains
+    data = data.dropna(subset=['start_pta', 'start_ptd'], how='any')
+
+
+   
+    data['start_station'] = data.apply(get_start_station, axis=1) # Encode Start Station
+    data['end_station'] = data.apply(get_end_station, axis=1) # Encode End Station
+
+    #Date Encoding
+    data['day_of_year_sin'] = [encode_sin_date(date) for date in data['date']]
+    data['day_of_year_cos'] = [encode_cos_date(date) for date in data['date']]
+
+    #Month Encoding
+    data['month_sin'] = [encode_sin_month(month) for month in data['month']]
+    data['month_cos'] = [encode_cos_month(month) for month in data['month']]
+
+
+    #Month Encoding
+    data['day_sin'] = [encode_sin_day_of_week(day) for day in data['day']]
+    data['day_cos'] = [encode_cos_day_of_week(day) for day in data['day']]
+
+
+    #Encoding time of day
+
+    data['init_ptd_sin'] = [encode_sin_hour_minute(str(time)) for time in data['init_ptd']]
+    data['init_ptd_cos'] = [encode_cos_hour_minute(str(time)) for time in data['init_ptd']]
+
+    data['start_pta_sin'] = [encode_sin_hour_minute(str(time)) for time in data['start_pta']]
+    data['start_pta_cos'] = [encode_cos_hour_minute(str(time)) for time in data['start_pta']]
+    
+#    data['start_ptd_sin'] = [encode_sin_hour_minute(time) for time in data['start_ptd']]
+#    data['start_ptd_cos'] = [encode_cos_hour_minute(time) for time in data['start_pta']]
+
+
+    data['end_pta_sin'] = [encode_sin_hour_minute(str(time)) for time in data['end_pta']]
+    data['end_pta_cos'] = [encode_cos_hour_minute(str(time)) for time in data['end_pta']]
+    
+
+    data['actually_delayed'] = [encode_delay(delay) for delay in data['end_delay']]
+
+    data = data.drop(['date', 'canc_reason', 'month', 'day','init_ptd', 'init_station', 'start_pta','start_ptd','end_pta','cancelled', 'toc_code', 'rid', 'canc_reason', 'start_ata', 'start_arrival_delay', 'start_dept_delay', 'init_atd', 'start_atd', 'start_dept_delay', 'end_ata', 'end_delay', 'delayed'], axis=1)
+
+    return data
+
 
 if __name__ == '__main__':
-    train_data = pd.read_csv("cleaned_data/not_cancelled_trains_dar_to_bhm.csv")
-    train_data['init_ptd'] = train_data['init_ptd'].apply(encode_cos_hour_minute)
-    print(train_data['init_ptd'])
+    data = prepare_for_delay_classification("dar", "bhm")
+
+
